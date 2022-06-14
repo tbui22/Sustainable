@@ -1,0 +1,134 @@
+/* DASHBOARD */
+
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap');
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.container {
+    background-color: rgb(157, 190, 187);
+    border-radius: 5px;
+    padding: 5%;
+    margin-top: 50px;
+}
+
+.navbar {
+    background-color: rgb(157, 190, 187);
+    margin: 10px 10px 0px 10px;
+    border-radius: 5px;
+}
+#navbarlinks {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px; 
+    font-family: 'Balsamiq Sans', cursive;
+}
+
+.btn {
+    margin: 10px; 
+    color: rgb(236, 235, 230);
+    font-weight: bold;
+    font-family: 'Balsamiq Sans', cursive;
+}
+
+img {
+    width: 95%;
+    margin: 3%;
+    border-radius: 5px;
+    
+}
+
+.maintext {
+    color: rgb(236, 235, 230);
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Balsamiq Sans', cursive;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.textbox {
+    border-color: rgb(236, 235, 230);
+    border-radius: 5px;
+}
+
+.tabletext {
+    color: rgb(236, 235, 230);
+    font-weight: bold;
+    font-family: 'Balsamiq Sans', cursive;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.col {
+    margin: 10px;
+    padding: 10px; 
+    background-color: rgb(157, 190, 187);
+    border-radius: 5px;
+}
+
+.row-white {
+    height: 10px;
+    background-color: white;
+}
+.column-white {
+    width: 2px;
+    background-color: white;
+}
+
+.row-margin-top {
+    height: 10px;
+    background-color: white;
+}
+
+.row-no-padding{
+    padding-left: 0%;
+    padding-right: 0%;
+    margin:0px;
+}
+
+.btn-border{
+    border: 1px solid rgb(236, 235, 230);
+    border-radius: 5px;
+}
+
+input[type=checkbox]:checked + label {
+    color:black;
+    text-decoration: line-through;
+} 
+
+.shoppinglist-text {
+    color: rgb(157, 190, 187);
+}
+
+.shoppinglist-button {
+    background-color: rgb(157, 190, 187);
+    color:rgb(236, 235, 230);
+    border-radius: 5px;
+}
+
+.small-box{
+    margin: 20px 10px 0px 0px;
+}
+
+.rbgbackground {
+    background-color: rgb(157, 190, 187);
+}
+
+.carousel {
+    width: 50%;
+    margin: auto;
+}
+
+#quote{
+    text-align: center;
+    padding:0px;
+    font-family: 'Balsamiq Sans', cursive;
+}
+#author{
+    text-align: center;
+    padding:0px;
+    font-family: 'Balsamiq Sans', cursive;
+}

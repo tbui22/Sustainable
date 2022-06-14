@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome!</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+{% if session ['user_id'] %}
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <h1 class="maintext">{{user_info.first_name}}'s {{category.name}} Inventory</h1>
+            <div id="navbarlinks">
+                <a href="/dashboard/" class="btn maintext" type="button"> Dashboard </a>
+                <!-- <a href="/shoppinglist/" class="maintext"> Shopping List </a> -->
+                <button class="btn maintext" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                    aria-controls="offcanvasRight">Shopping List</button>
+                <a class="btn maintext" type="button" href="/logout/">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissable" role="alert">
+            <p class="maintext">{{ message }}
+                <!-- <button type="button" class="close" data-dismiss= 'aleart' aria-label="close">
+                <span aria-hidden="true">x</span>
+            </button> -->
+            </p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Tabs Dashboard -->
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+                    type="button" role="tab" aria-controls="nav-home" aria-selected="true">Kitchen</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                    type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Bathroom</button>
+                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+                    type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Pets</button>
+            </div>
+        </nav>
+        <!-- Kitchen TAB -->
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                <!-- Add Item Modal -->
+                <button type="button" class="btn maintext" data-toggle="modal" data-target="#exampleModal">
+                    Add Item
+                </button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: rgb(157, 190, 187)">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Item</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/additem/" , method="POST">
+                                    <input type="hidden" name="category_id" value="7">
+                                    Item Name: <input class="textbox" type='text' name="name">
+                                    <br> <br>
+                                    Quantity: <input class="textbox" type="number" name="quantity">
+                                    <br> <br>
+                                    Restock Date: <input class="textbox" type="date" name="restock_date">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn maintext"
+                                    style="background-color: rgb(157, 190, 187)">Add
+                                    Item</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Start of Table -->
+                <table class="maintext table table-hover table-striped ">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Items</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Restock Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items if category.id == 7 %}
+                        <!-- <form action='/editquantity/' , method='POST'>
+                    <input type="hidden" name="category_id" value="{{ category.id }}">
+                    <input type="hidden" name="id" value="{{ item.id }}"> -->
+                        <tr>
+                            <td scope="col"></td>
+                            <td> {{ item.name }} </td>
+                            <td> {{ item.quantity }}
+                                <!-- <input type='number' value='{{ item.quantity }}' name="quantity"> -->
+                            </td>
+                            <td> {{ item.restock_date }}
+                                <!-- <input type='date' name='restock_date' value='{{ item.restock_date }}'> -->
+                            </td>
+                            <td>
+                                <a href="/addtolist/{{ item.id }}/{{7}}/" class="btn maintext"> Add to
+                                    Shopping
+                                    List</a>
+                                <!-- <button type="submit" class="btn"> Edit Quantity </button> -->
+                                <button type="button" class="btn maintext" data-toggle="modal"
+                                    data-target="#edit{{item.id}}">
+                                    Edit Item
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="edit{{item.id}}" tabindex="-1" role="dialog"
+                                    aria-labelledby="edit" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="background-color: rgb(157, 190, 187)">
+                                                <h5 class="modal-title" id="edit{{item.id}}"> Edit Item </h5>
+                                            </div>
+                                            <form action='/editquantity/' , method='POST'>
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="category_id" value="7">
+                                                    <input type="hidden" name="id" value="{{ item.id }}">
+                                                    Item Name: <input class="textbox" type='text' name="name"
+                                                        value="{{ item.name }}">
+                                                    <br> <br>
+                                                    Quantity: <input class="textbox" type="number" name="quantity"
+                                                        value="{{ item.quantity }}">
+                                                    <br> <br>
+                                                    Restock Date: <input class="textbox" type="date" name="restock_date"
+                                                        value=" {{ item.restock_date }} ">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal"> Close
+                                                    </button>
+                                                    <button type="submit" class="btn maintext"
+                                                        style="background-color: rgb(157, 190, 187)"> Edit Item
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="/delete/{{ item.id }}/{{7}}/" class="maintext"> Delete </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"> 
+            <!-- Add Item Modal -->
+            <button type="button" class="btn maintext" data-toggle="modal" data-target="#exampleModal">
+                Add Item
+            </button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: rgb(157, 190, 187)">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Item</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/additem/" , method="POST">
+                                <input type="hidden" name="category_id" value="7">
+                                Item Name: <input class="textbox" type='text' name="name">
+                                <br> <br>
+                                Quantity: <input class="textbox" type="number" name="quantity">
+                                <br> <br>
+                                Restock Date: <input class="textbox" type="date" name="restock_date">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn maintext" style="background-color: rgb(157, 190, 187)">Add
+                                Item</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <!--  -->
+            <table class="maintext table table-hover table-striped ">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Items</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Restock Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items if category.id == 8 %}
+                    <!-- <form action='/editquantity/' , method='POST'>
+                        <input type="hidden" name="category_id" value="{{ category.id }}">
+                        <input type="hidden" name="id" value="{{ item.id }}"> -->
+                    <tr>
+                        <td scope="col"></td>
+                        <td> {{ item.name }} </td>
+                        <td> {{ item.quantity }}
+                            <!-- <input type='number' value='{{ item.quantity }}' name="quantity"> -->
+                        </td>
+                        <td> {{ item.restock_date }}
+                            <!-- <input type='date' name='restock_date' value='{{ item.restock_date }}'> -->
+                        </td>
+                        <td>
+                            <a href="/addtolist/{{ item.id }}/{{8}}/" class="btn maintext"> Add to Shopping
+                                List</a>
+                            <!-- <button type="submit" class="btn"> Edit Quantity </button> -->
+                            <button type="button" class="btn maintext" data-toggle="modal" data-target="#edit{{item.id}}">
+                                Edit Item
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="edit{{item.id}}" tabindex="-1" role="dialog" aria-labelledby="edit"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color: rgb(157, 190, 187)">
+                                            <h5 class="modal-title" id="edit{{item.id}}"> Edit Item </h5>
+                                        </div>
+                                        <form action='/editquantity/' , method='POST'>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="category_id" value="8">
+                                                <input type="hidden" name="id" value="{{ item.id }}">
+                                                Item Name: <input class="textbox" type='text' name="name"
+                                                    value="{{ item.name }}">
+                                                <br> <br>
+                                                Quantity: <input class="textbox" type="number" name="quantity"
+                                                    value="{{ item.quantity }}">
+                                                <br> <br>
+                                                Restock Date: <input class="textbox" type="date" name="restock_date"
+                                                    value=" {{ item.restock_date }} ">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal"> Close
+                                                </button>
+                                                <button type="submit" class="btn maintext"
+                                                    style="background-color: rgb(157, 190, 187)"> Edit Item </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="/delete/{{ item.id }}/{{ category.id }}/" class="maintext"> Delete </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div></div>
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">asdfaswerfasdf</div>
+    </div>
+
+    <h1 class="maintext">{{category.name}}:</h1>
+
+    <!-- Add Item Modal -->
+    <button type="button" class="btn maintext" data-toggle="modal" data-target="#exampleModal">
+        Add Item
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: rgb(157, 190, 187)">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Item</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="/additem/" , method="POST">
+                        <input type="hidden" name="category_id" value="{{ category.id }}">
+                        Item Name: <input class="textbox" type='text' name="name">
+                        <br> <br>
+                        Quantity: <input class="textbox" type="number" name="quantity">
+                        <br> <br>
+                        Restock Date: <input class="textbox" type="date" name="restock_date">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn maintext" style="background-color: rgb(157, 190, 187)">Add
+                        Item</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+    <!--  -->
+    <table class="maintext table table-hover table-striped ">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Items</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Restock Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <!-- <form action='/editquantity/' , method='POST'>
+                    <input type="hidden" name="category_id" value="{{ category.id }}">
+                    <input type="hidden" name="id" value="{{ item.id }}"> -->
+            <tr>
+                <td scope="col"></td>
+                <td> {{ item.name }} </td>
+                <td> {{ item.quantity }}
+                    <!-- <input type='number' value='{{ item.quantity }}' name="quantity"> -->
+                </td>
+                <td> {{ item.restock_date }}
+                    <!-- <input type='date' name='restock_date' value='{{ item.restock_date }}'> -->
+                </td>
+                <td>
+                    <a href="/addtolist/{{ item.id }}/{{ category.id }}/" class="btn maintext"> Add to Shopping
+                        List</a>
+                    <!-- <button type="submit" class="btn"> Edit Quantity </button> -->
+                    <button type="button" class="btn maintext" data-toggle="modal" data-target="#edit{{item.id}}">
+                        Edit Item
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="edit{{item.id}}" tabindex="-1" role="dialog" aria-labelledby="edit"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: rgb(157, 190, 187)">
+                                    <h5 class="modal-title" id="edit{{item.id}}"> Edit Item </h5>
+                                </div>
+                                <form action='/editquantity/' , method='POST'>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="category_id" value="{{ category.id }}">
+                                        <input type="hidden" name="id" value="{{ item.id }}">
+                                        Item Name: <input class="textbox" type='text' name="name"
+                                            value="{{ item.name }}">
+                                        <br> <br>
+                                        Quantity: <input class="textbox" type="number" name="quantity"
+                                            value="{{ item.quantity }}">
+                                        <br> <br>
+                                        Restock Date: <input class="textbox" type="date" name="restock_date"
+                                            value=" {{ item.restock_date }} ">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"> Close
+                                        </button>
+                                        <button type="submit" class="btn maintext"
+                                            style="background-color: rgb(157, 190, 187)"> Edit Item </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/delete/{{ item.id }}/{{ category.id }}/" class="maintext"> Delete </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <!-- OFF CANVAS -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h1 id="offcanvasRightLabel" class="maintext">Shopping List</h1>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+
+            <h3 class="tabletext">Kitchen: </h3>
+            {% for product in products %}
+            {% if product.category_id == 7 and product.shopping_list_id != 0 %}
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <td class='tabletext'>
+                            <input type="checkbox" name="checkbox" value="check">
+                            {{ product.name  }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% endfor %}
+
+            <h3 class="tabletext">Bathroom: </h3>
+            {% for product in products %}
+            {% if product.category_id == 8 and product.shopping_list_id != 0 %}
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <td class='tabletext'>
+                            <input type="checkbox" name="checkbox" value="check">
+                            {{ product.name  }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% endfor %}
+
+            <h3 class="tabletext">Pets: </h3>
+            {% for product in products %}
+            {% if product.category_id == 9 and product.shopping_list_id != 0 %}
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <td class='tabletext'>
+                            <input type="checkbox" name="checkbox" value="check">
+                            {{ product.name  }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% endfor %}
+
+            <h3 class="tabletext">Baby: </h3>
+            {% for product in products %}
+            {% if product.category_id == 10 and product.shopping_list_id != 0 %}
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <td class='tabletext'>
+                            <input type="checkbox" name="checkbox" value="check">
+                            {{ product.name  }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% endfor %}
+
+            <h3 class="tabletext">Personal Care: </h3>
+            {% for product in products %}
+            {% if product.category_id == 11 and product.shopping_list_id != 0 %}
+            <table class="table table-hover">
+                <tbody>
+                    <tr>h3
+                        <td class='tabletext'>
+                            <input type="checkbox" name="checkbox" value="check">
+                            {{ product.name  }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% endfor %}
+
+            <h3 class="tabletext">Cleaning: </h3>
+            {% for product in products %}
+            {% if product.category_id == 12 and product.shopping_list_id != 0 %}
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <td class='tabletext'>
+                            <input type="checkbox" name="checkbox" value="check">
+                            {{ product.name  }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <!-- End OFF CANVAS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+{% endif %}
+
+</html>
